@@ -3,6 +3,7 @@ aiohttp-retry
 aioitertools
 aioredis
 alembic
+asyncpg
 altair
 amqp
 anyio
