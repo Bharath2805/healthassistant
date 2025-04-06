@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+httpx
+pydantic
+asyncpg
+python-dotenv
+openai
+google-cloud-vision
+pillow
+tenacity
+fuzzywuzzy
+python-jwt
+bcrypt
+beautifulsoup4
+celery
+psycopg2

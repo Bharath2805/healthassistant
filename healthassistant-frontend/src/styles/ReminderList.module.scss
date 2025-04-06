@@ -1,0 +1,43 @@
+.reminderBox {
+    background-color: #ffffff;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+    max-width: 100%;
+  }
+  
+  .reminderBox:hover {
+    transform: translateY(-2px);
+  }
+  
+  .reminderBox h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+  }
+  
+  .reminderItem {
+    background: #f9f9f9;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .reminderItem p {
+    margin: 0.25rem 0;
+    color: #333;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .loading,
+  .empty {
+    font-size: 0.95rem;
+    color: #999;
+  }
+  

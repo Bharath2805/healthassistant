@@ -1,0 +1,68 @@
+// src/styles/Reminders.module.scss
+.wrapper {
+    padding: 2rem;
+    max-width: 700px;
+    margin: auto;
+  }
+  
+  .form {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  
+    input,
+    select {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      flex: 1;
+    }
+  
+    button {
+      padding: 0.5rem 1rem;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  }
+  
+  .error {
+    color: red;
+    margin-top: 0.5rem;
+  }
+  
+  .card {
+    background: #f4f4f4;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .card h3 {
+    margin: 0 0 0.5rem;
+  }
+  
+  .card p {
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+  }
+  
+  .card button {
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: #ff444f;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  

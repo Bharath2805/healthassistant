@@ -1,0 +1,122 @@
+.container {
+    padding: 2rem;
+    background: #0d0d0d;
+    color: #ccc;
+    min-height: 100vh;
+  }
+  
+  .heading {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00f0ff;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .uploadBox {
+    border: 2px dashed #00f0ff;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    background-color: #111;
+    margin-bottom: 2rem;
+  
+    label {
+      font-weight: bold;
+      color: #00f0ff;
+      display: block;
+      margin-bottom: 1rem;
+    }
+  
+    input[type="file"] {
+      display: block;
+      margin: 0 auto 1rem auto;
+    }
+  }
+  
+  .preview {
+    max-width: 200px;
+    margin: 1rem auto;
+    border: 2px solid #00f0ff;
+    border-radius: 8px;
+  }
+  
+  .glowBtn {
+    background: #00f0ff;
+    color: #000;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 10px;
+    animation: pulse 2s infinite ease-in-out;
+    box-shadow: 0 0 10px #00f0ff;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.3s ease;
+    text-align: center;
+  
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00f0ff;
+    }
+  
+    &:disabled {
+      background: #666;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+  
+  .resultBox {
+    border: 2px solid #00f0ff;
+    background-color: #111;
+    padding: 2rem;
+    border-radius: 12px;
+    color: #ccc;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .resultTitle {
+    color: #00f0ff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: flex-start;
+  
+    button {
+      flex: 1 1 280px;
+      min-width: 240px;
+      max-width: 320px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 0.5rem;
+  
+      // Optional: different alignment
+      &:first-child {
+        margin-left: 0;
+      }
+  
+      &:last-child {
+        margin-left: 1rem;
+  
+        @media (max-width: 640px) {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+  
+  
+  .disclaimer {
+    margin-top: 1rem;
+    font-style: italic;
+    color: gold;
+  }
+  

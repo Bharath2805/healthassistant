@@ -1,0 +1,22 @@
+.card {
+    background: linear-gradient(145deg, #111, #1a1a1a);
+    border: 1px solid #0ff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    transition: all 0.3s ease-in-out;
+    color: #eee;
+  }
+  
+  .name {
+    color: #00f7ff;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  a {
+    color: #0ff;
+    text-decoration: underline;
+  }
+  

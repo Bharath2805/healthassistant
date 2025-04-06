@@ -1,0 +1,88 @@
+.sidebar {
+    width: 250px;
+    background: rgba(15, 17, 23, 0.9);
+    backdrop-filter: blur(6px);
+    padding: 1rem;
+    border-right: 1px solid #222;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .newChat {
+    background: linear-gradient(135deg, #4460ff, #667eff);
+    color: white;
+    font-weight: bold;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    box-shadow: 0 0 12px #4460ff88;
+    transition: all 0.2s ease;
+  
+    &:hover {
+      background: linear-gradient(135deg, #3350e0, #5570ff);
+      box-shadow: 0 0 14px #3350e088;
+    }
+  }
+  
+  .sessionList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .sessionItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1b1d2b;
+    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+  }
+  
+  .sessionItem:hover {
+    background-color: #2a2d3f;
+  }
+  
+  .sessionTitle {
+    flex: 1;
+    cursor: pointer;
+    color: #fff;
+    font-size: 0.95rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .renameInput {
+    flex: 1;
+    padding: 0.4rem 0.5rem;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+  }
+  
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-left: 0.5rem;
+  
+    svg {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+  
+    svg:hover {
+      transform: scale(1.15);
+    }
+  }
+  

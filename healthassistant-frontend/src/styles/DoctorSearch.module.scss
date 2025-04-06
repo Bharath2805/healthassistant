@@ -1,0 +1,67 @@
+/* src/styles/DoctorSearch.module.scss */
+
+.doctorSearchPage {
+  padding: 2rem;
+  color: #e0f7fa;
+  background: radial-gradient(circle at center, #0d0d0d, #000000);
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #00ffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.searchBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+
+  input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: #1a1a1a;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 0.5rem;
+    outline: none;
+    font-size: 1rem;
+  }
+
+  button {
+    padding: 0.75rem 1.5rem;
+    background: #00e5ff;
+    border: none;
+    border-radius: 0.5rem;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background: #00bcd4;
+    }
+  }
+}
+
+.notFound {
+  color: #ff6666;
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.doctorGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  position: relative;
+}

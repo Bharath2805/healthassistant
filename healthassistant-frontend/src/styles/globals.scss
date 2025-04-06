@@ -1,0 +1,165 @@
+@use "sass:color";
+@use "./theme" as *;
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-main;
+  background-color: $color-bg;
+  color: $color-text;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 0.95rem;
+  color: $color-muted;
+}
+
+/* Navbar */
+.navbar {
+  background-color: $color-white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  box-shadow: $shadow-card;
+
+  h1 {
+    font-size: 1.5rem;
+    color: $color-primary;
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    font-weight: 500;
+
+    li {
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $color-primary;
+      }
+    }
+  }
+}
+
+/* Layout */
+.home {
+  padding: 1rem;
+}
+
+.home-content {
+  padding: 2rem 4rem;
+}
+
+.welcome {
+  margin-bottom: 1rem;
+
+  h1 {
+    font-size: 2rem;
+    color: $color-text;
+  }
+
+  p {
+    color: $color-muted;
+  }
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Panels */
+.left-panel,
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Cards */
+.feature-card {
+  background-color: $color-white;
+  border-radius: $radius-card;
+  padding: 1.5rem;
+  box-shadow: $shadow-card;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.reminder-box,
+.emergency-box {
+  background-color: $color-white;
+  border-radius: $radius-card;
+  padding: 1.5rem;
+  box-shadow: $shadow-card;
+
+  h2 {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Emergency Button */
+.emergency-button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  background-color: $color-danger;
+  color: $color-white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: color.adjust($color-danger, $lightness: -10%);
+    box-shadow: 0 6px 18px rgba(255, 77, 79, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 77, 79, 0.2);
+  }
+}
+
+/* Hero Image */
+.hero-doctor {
+  display: flex;
+  justify-content: center;
+
+  .doctor-img {
+    width: 220px;
+    height: auto;
+    object-fit: cover;
+  }
+}

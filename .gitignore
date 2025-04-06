@@ -1,0 +1,40 @@
+# === General ===
+.DS_Store
+*.pyc
+__pycache__/
+celerybeat-schedule.db
+
+# === Python / FastAPI backend ===
+env/
+.venv/
+*.env
+*.rdb
+*.sqlite3
+*.db
+
+# === Virtual environment ===
+backend/venv/
+
+# === Node / React frontend ===
+node_modules/
+dist/
+.healthassistant-frontend/node_modules/
+.healthassistant-frontend/dist/
+
+# === Uploads / User files ===
+uploads/
+backend/uploads/
+
+# === VSCode ===
+.vscode/
+
+# === Logs and caches ===
+*.log
+*.tmp
+.cache/
+coverage/
+*.coverage
+
+# === OS ===
+Thumbs.db
+ehthumbs.db

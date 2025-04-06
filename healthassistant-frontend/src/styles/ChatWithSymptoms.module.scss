@@ -1,0 +1,118 @@
+// ChatWithSymptoms.module.scss – Enhanced with animations and polish
+
+.symptomPage {
+  background: linear-gradient(135deg, #0f1117, #1a1c23);
+  min-height: 100vh;
+  color: white;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #00e1ff;
+  animation: popIn 0.5s ease-in-out;
+}
+
+.symptomInputRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+  animation: slideIn 0.4s ease;
+}
+
+.symptomInput {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  color: #333;
+}
+
+.removeButton {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #ff1a1a;
+  }
+}
+
+.actionButton {
+  background: linear-gradient(to right, #4460ff, #667eff);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px #4460ff99;
+  transition: all 0.3s ease;
+  width: 100%;
+
+  &:hover {
+    background: linear-gradient(to right, #3350e0, #5570ff);
+    transform: scale(1.02);
+  }
+}
+
+.resultCard {
+  margin-top: 2rem;
+  background-color: #1e1f2a;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.15);
+  color: #eee;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.resultTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #00e1ff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.spin {
+  animation: spin 1s linear infinite;
+  font-size: 1.2rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
