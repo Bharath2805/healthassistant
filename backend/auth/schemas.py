@@ -4,8 +4,11 @@ from typing import Optional
 from uuid import UUID
 
 # ----------- Public User Object -----------
+
+
 class User(BaseModel):
-    id: Optional[UUID]  # Updated to Optional[UUID] for stricter validation
+    id: Optional[UUID]
+ # Updated to Optional[UUID] for stricter validation
     email: EmailStr
     role: str = "user"
 
