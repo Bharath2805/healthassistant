@@ -1,19 +1,43 @@
-asyncpg==0.30.0
-celery==5.5.0
-fastapi==0.115.12
-httpx==0.28.1
-numpy==2.2.4
-openai==1.70.0
-opencv_python==4.11.0.86
-Pillow==11.1.0
-pydantic==2.11.2
-PyJWT==2.10.1
-PyJWT==2.10.1
-python-dotenv==1.1.0
-python_bcrypt==0.3.2
-python_jose==3.4.0
-pytz==2024.1
-reportlab==4.3.1
-sendgrid==6.11.0
-twilio==9.5.1
-uvicorn==0.34.0
+# FastAPI and ASGI server
+fastapi
+uvicorn[standard]
+
+# OpenAI GPT-4o support
+openai==1.14.3
+
+# Google Vision API for image analysis
+google-cloud-vision
+
+# Image processing
+pillow
+opencv-python-headless
+numpy
+
+# Async HTTP requests (optional, useful for future API integrations)
+httpx
+
+# Email and notifications
+sendgrid
+python-dotenv
+
+# Authentication and security
+bcrypt
+python-jose[cryptography]
+passlib[bcrypt]
+itsdangerous
+
+# Database
+sqlalchemy
+asyncpg
+alembic
+
+# Background tasks and scheduling
+celery
+redis
+
+# PDF generation
+reportlab
+
+# Utility
+python-multipart
+uuid

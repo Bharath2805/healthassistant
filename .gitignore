@@ -38,3 +38,7 @@ coverage/
 # === OS ===
 Thumbs.db
 ehthumbs.db
+
+# === Google Cloud Credentials ===
+*.json
+

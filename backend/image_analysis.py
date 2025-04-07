@@ -23,12 +23,32 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
 # Load environment variables
+from dotenv import load_dotenv
+import os
+from openai import AsyncOpenAI
+from google.cloud import vision
+
+# Load environment variables from .env file
 load_dotenv()
+
+# Set Google Cloud Vision credentials
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+if not os.environ["GOOGLE_APPLICATION_CREDENTIALS"]:
+    raise ValueError("GOOGLE_APPLICATION_CREDENTIALS not found in environment variables")\
+
+print("🔑 GOOGLE_APPLICATION_CREDENTIALS =", os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+
+
+# Set OpenAI API key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not found in environment variables")
+
+# Initialize OpenAI and Vision clients
 openai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 vision_client = vision.ImageAnnotatorClient()
+print(vision_client)
+
 
 # Configuration
 MAX_FILE_SIZE = 15 * 1024 * 1024  # 15MB for higher resolution images
