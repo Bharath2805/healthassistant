@@ -12,9 +12,9 @@ from backend.chat import chat, get_sessions, ChatRequest
 from backend.doctor_search import router as doctor_router
 from backend.image_analysis import router as image_router
 from backend.health_assistant import router as health_router
-from backend.auth.auth import get_current_user  # ✅ FIXED
-from backend.auth.routes import router as auth_router  # ✅ KEEP THIS TO LOAD ROUTES
-from backend.auth.schemas import User  # ✅ USE THIS User SCHEMA
+from backend.auth.auth import get_current_user
+from backend.auth.routes import router as auth_router
+from backend.auth.schemas import User
 from backend.emergency_info import router as emergency_router
 from backend.models.reminders import ReminderCreate
 from backend.services.reminders import (
@@ -24,6 +24,11 @@ from backend.services.reminders import (
 # Load environment variables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+# Configuration from environment variables
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
 # Debug print (optional)
 print(f"JWT_SECRET: {os.getenv('JWT_SECRET')}")
@@ -40,7 +45,7 @@ app = FastAPI(
 # CORS setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[FRONTEND_URL],  # Use dynamic FRONTEND_URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -93,7 +98,7 @@ async def delete_reminder_endpoint(reminder_id: int, current_user: User = Depend
 async def reminder_history_endpoint(current_user: User = Depends(get_current_user)):
     return await get_reminder_history(current_user)
 
-# 🌍 Country via IP
+# 🌍 Country via IP necropsy
 async def get_user_country():
     async with httpx.AsyncClient() as client:
         try:

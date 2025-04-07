@@ -1,6 +1,5 @@
 # backend/auth/routes.py
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 import logging
@@ -9,27 +8,31 @@ from jose import jwt
 import httpx
 import os
 import uuid
-from google.oauth2 import id_token  # Added for Google ID token verification
-from google.auth.transport import requests as google_requests  # Added for Google ID token verification
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+
 from backend.auth.auth import signup, login, get_current_user
 from backend.auth.schemas import (
     UserCreate, UserLogin, ForgotPasswordRequest, ResetPasswordRequest, User, PasswordUpdateRequest
 )
 from backend.database import get_db_connection
-from backend.auth.utils.tokens import create_email_token, verify_email_token, create_access_token, verify_refresh_token, create_refresh_token
+from backend.auth.utils.tokens import (
+    create_email_token, verify_email_token, create_access_token,
+    verify_refresh_token, create_refresh_token
+)
 from backend.utils.email import send_email
 from backend.auth.utils.hash import hash_password, verify_password
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 logger = logging.getLogger(__name__)
 
-# Google OAuth2 Configuration
+# Configuration from environment variables
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-REDIRECT_URI = "http://localhost:8000/auth/google-callback"
-FRONTEND_URL = "http://localhost:5173"
+REDIRECT_URI = f"{BACKEND_URL}/auth/google-callback"
 
-     
 # -------------------- MODELS --------------------
 class PhoneUpdateRequest(BaseModel):
     phone: str
@@ -56,7 +59,6 @@ async def signup_endpoint(user: UserCreate):
 async def login_endpoint(user: UserLogin, request: Request):
     return await login(user, request)
 
-
 # -------------------- GOOGLE LOGIN (REDIRECT FLOW) --------------------
 @router.get("/google-login")
 async def google_login():
@@ -78,7 +80,6 @@ async def google_login():
 async def google_callback(code: str):
     logger.info("Handling Google OAuth callback")
     async with httpx.AsyncClient() as client:
-        # Exchange code for tokens
         token_response = await client.post("https://oauth2.googleapis.com/token", data={
             "client_id": GOOGLE_CLIENT_ID,
             "client_secret": GOOGLE_CLIENT_SECRET,
@@ -92,10 +93,9 @@ async def google_callback(code: str):
             raise HTTPException(status_code=400, detail="Failed to get access token")
 
         tokens = token_response.json()
-        id_token = tokens["id_token"]
+        id_token_str = tokens["id_token"]
 
-        # Decode token
-        payload = jwt.get_unverified_claims(id_token)
+        payload = jwt.get_unverified_claims(id_token_str)
         email = payload.get("email")
 
         if not email:
@@ -104,7 +104,6 @@ async def google_callback(code: str):
 
         conn = await get_db_connection()
         try:
-            # Check if user exists
             user = await conn.fetchrow("SELECT id, email, role FROM users WHERE email = $1", email)
             if not user:
                 user_id = str(uuid.uuid4())
@@ -123,7 +122,6 @@ async def google_callback(code: str):
             access_token = create_access_token(user_id, role)
             refresh_token = create_refresh_token(user_id)
 
-            # Store refresh token in DB
             expires_at = datetime.utcnow() + timedelta(days=7)
             await conn.execute(
                 "INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)",
@@ -131,7 +129,6 @@ async def google_callback(code: str):
             )
 
             logger.info(f"Google login successful for email: {email}")
-            # Redirect to frontend with tokens
             frontend_redirect_url = (
                 f"{FRONTEND_URL}/google-auth-success"
                 f"?access_token={access_token}&refresh_token={refresh_token}"
@@ -144,20 +141,17 @@ async def google_callback(code: str):
 @router.post("/google-login-token")
 async def google_login_token(request: GoogleLoginRequest):
     try:
-        # Verify the Google token
         id_info = id_token.verify_oauth2_token(
             request.token,
             google_requests.Request(),
-            GOOGLE_CLIENT_ID  # Must match your frontend client ID
+            GOOGLE_CLIENT_ID
         )
         email = id_info["email"]
 
         conn = await get_db_connection()
         try:
             user = await conn.fetchrow("SELECT id, email, role FROM users WHERE email = $1", email)
-
             if not user:
-                # First-time Google login: create user
                 user_id = str(uuid.uuid4())
                 await conn.execute(
                     """
@@ -174,7 +168,6 @@ async def google_login_token(request: GoogleLoginRequest):
             access_token = create_access_token(user_id, role)
             refresh_token = create_refresh_token(user_id)
 
-            # Store refresh token
             expires_at = datetime.utcnow() + timedelta(days=7)
             await conn.execute(
                 """
@@ -193,7 +186,6 @@ async def google_login_token(request: GoogleLoginRequest):
             }
         finally:
             await conn.close()
-
     except ValueError as e:
         logger.error(f"Google token validation failed: {str(e)}")
         raise HTTPException(status_code=401, detail="Invalid Google token")
@@ -264,7 +256,7 @@ async def resend_verification(request: ForgotPasswordRequest):
             return {"message": "Email is already verified"}
 
         token = create_email_token(user["id"])
-        link = f"http://localhost:8000/auth/verify-email?token={token}"
+        link = f"{BACKEND_URL}/auth/verify-email?token={token}"
         try:
             send_email(
                 to_email=request.email,
@@ -274,7 +266,6 @@ async def resend_verification(request: ForgotPasswordRequest):
             logger.info(f"Verification email resent to: {request.email}")
         except Exception as e:
             logger.error(f"Failed to resend verification email to {request.email}: {str(e)}")
-            # Continue despite email failure, since the token is generated
         return {"message": "Verification email resent successfully"}
     finally:
         await conn.close()
@@ -291,7 +282,7 @@ async def forgot_password(request: ForgotPasswordRequest):
             raise HTTPException(status_code=404, detail="Email not found")
 
         token = create_email_token(user["id"])
-        reset_link = f"http://localhost:5173/reset-password?token={token}"
+        reset_link = f"{FRONTEND_URL}/reset-password?token={token}"
         try:
             send_email(
                 to_email=request.email,
@@ -301,7 +292,6 @@ async def forgot_password(request: ForgotPasswordRequest):
             logger.info(f"Password reset link sent to: {request.email}")
         except Exception as e:
             logger.error(f"Failed to send password reset email to {request.email}: {str(e)}")
-            # Continue despite email failure, since the token is generated
         return {"message": "Password reset link sent to your email"}
     finally:
         await conn.close()
@@ -363,10 +353,7 @@ async def update_password(
 async def refresh_token(request: RefreshTokenRequest):
     logger.info("Refresh token requested")
     try:
-        # Verify the refresh token using JWT
         user_id = verify_refresh_token(request.refresh_token)
-
-        # Check if the token exists in the database, is not revoked, and is not expired
         conn = await get_db_connection()
         try:
             record = await conn.fetchrow(
@@ -380,35 +367,21 @@ async def refresh_token(request: RefreshTokenRequest):
                 logger.error(f"Invalid or expired refresh token for user_id: {user_id}")
                 raise HTTPException(status_code=401, detail="Invalid or expired refresh token")
 
-            # Fetch user details
             user = await conn.fetchrow("SELECT id, role FROM users WHERE id = $1", user_id)
             if not user:
                 logger.error(f"User not found for id: {user_id}")
                 raise HTTPException(status_code=404, detail="User not found")
 
-            # Generate new access token
             new_access_token = create_access_token(user["id"], user["role"])
-
-            # Rotate the refresh token (revoke the old one and issue a new one)
             new_refresh_token = create_refresh_token(user["id"])
             expires_at = datetime.utcnow() + timedelta(days=7)
             
-            # Revoke the old refresh token
             await conn.execute(
-                """
-                UPDATE refresh_tokens 
-                SET revoked = TRUE 
-                WHERE token = $1
-                """,
+                "UPDATE refresh_tokens SET revoked = TRUE WHERE token = $1",
                 request.refresh_token
             )
-            
-            # Store the new refresh token
             await conn.execute(
-                """
-                INSERT INTO refresh_tokens (user_id, token, expires_at) 
-                VALUES ($1, $2, $3)
-                """,
+                "INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)",
                 user["id"], new_refresh_token, expires_at
             )
 
@@ -429,10 +402,7 @@ async def refresh_token(request: RefreshTokenRequest):
 async def refresh_token_endpoint(request: RefreshTokenRequest):
     logger.info("Refresh token requested via /refresh-token")
     try:
-        # Verify the refresh token using JWT
         user_id = verify_refresh_token(request.refresh_token)
-
-        # Check if the token exists in the database, is not revoked, and is not expired
         conn = await get_db_connection()
         try:
             record = await conn.fetchrow(
@@ -446,35 +416,21 @@ async def refresh_token_endpoint(request: RefreshTokenRequest):
                 logger.error(f"Invalid or expired refresh token for user_id: {user_id}")
                 raise HTTPException(status_code=401, detail="Invalid or expired refresh token")
 
-            # Fetch user details
             user = await conn.fetchrow("SELECT id, role FROM users WHERE id = $1", user_id)
             if not user:
                 logger.error(f"User not found for id: {user_id}")
                 raise HTTPException(status_code=404, detail="User not found")
 
-            # Generate new access token
             new_access_token = create_access_token(user["id"], user["role"])
-
-            # Rotate the refresh token (revoke the old one and issue a new one)
             new_refresh_token = create_refresh_token(user["id"])
             expires_at = datetime.utcnow() + timedelta(days=7)
             
-            # Revoke the old refresh token
             await conn.execute(
-                """
-                UPDATE refresh_tokens 
-                SET revoked = TRUE 
-                WHERE token = $1
-                """,
+                "UPDATE refresh_tokens SET revoked = TRUE WHERE token = $1",
                 request.refresh_token
             )
-            
-            # Store the new refresh token
             await conn.execute(
-                """
-                INSERT INTO refresh_tokens (user_id, token, expires_at) 
-                VALUES ($1, $2, $3)
-                """,
+                "INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)",
                 user["id"], new_refresh_token, expires_at
             )
 
@@ -496,13 +452,8 @@ async def logout(request: RefreshTokenRequest):
     logger.info("Logout requested")
     conn = await get_db_connection()
     try:
-        # Revoke the refresh token
         result = await conn.execute(
-            """
-            UPDATE refresh_tokens 
-            SET revoked = TRUE 
-            WHERE token = $1
-            """,
+            "UPDATE refresh_tokens SET revoked = TRUE WHERE token = $1",
             request.refresh_token
         )
         if result == "UPDATE 0":

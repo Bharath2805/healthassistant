@@ -7,6 +7,16 @@ from datetime import datetime
 import asyncio
 import logging
 import pytz
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, "../.env"))  # Adjusted path to reach .env in parent directory
+
+# Configuration from environment variables
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
 celery = Celery("reminders", broker="redis://localhost:6379/0")
 logger = logging.getLogger(__name__)
@@ -29,13 +39,13 @@ def check_reminders():
             if user:
                 status = []
                 
-                # ✅ Improved subject and email content
                 subject = f"Health Reminder: Take your {r['medicine']} at {r['reminder_time']}"
                 body = (
                     f"Hello,\n\n"
                     f"This is your scheduled health reminder from Health Assistant.\n\n"
                     f"💊 Medicine: {r['medicine']}\n"
                     f"⏰ Time: {r['reminder_time']}\n\n"
+                    f"For more details, visit {BASE_URL}/health-assistant\n\n"
                     "Stay healthy and take care!\n"
                     "— Your Health Assistant Team\n\n"
                     "You received this reminder because you opted in via our app."
