@@ -6,6 +6,8 @@ alembic
 altair
 amqp
 anyio
+asyncpg
+
 bcrypt
 beautifulsoup4
 billiard
