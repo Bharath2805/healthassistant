@@ -17,13 +17,15 @@ async def init_db():
 
         await conn.execute('''
         CREATE TABLE IF NOT EXISTS users (
-            id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-            email TEXT UNIQUE NOT NULL,
-            password TEXT,
-            role TEXT DEFAULT 'user',
-            auth_provider TEXT DEFAULT 'email',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    email TEXT UNIQUE NOT NULL,
+    password TEXT,
+    role TEXT DEFAULT 'user',
+    auth_provider TEXT DEFAULT 'email',
+    is_verified BOOLEAN DEFAULT FALSE, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
         CREATE TABLE IF NOT EXISTS sessions (
             id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -109,6 +111,7 @@ async def init_db():
             sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             delivery_status TEXT DEFAULT 'pending'
         );
+        
         ''')
         logger.info("✅ Database tables initialized successfully")
         await conn.close()
