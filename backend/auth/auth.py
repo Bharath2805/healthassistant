@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 JWT_SECRET = os.getenv("JWT_SECRET")
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")  # ✅ ADDED
 security = HTTPBearer()
 oauth2_scheme = HTTPBearer()
 
@@ -91,7 +92,7 @@ async def signup(user: UserCreate) -> dict:
         )
 
         verification_token = create_email_token(user_id)
-        verification_link = f"http://localhost:8000/auth/verify-email?token={verification_token}"
+        verification_link = f"{BASE_URL}/auth/verify-email?token={verification_token}"  # ✅ FIXED
 
         try:
             send_email(
